@@ -1,237 +1,601 @@
 calories,protein,carbs,fat,health_label
-578,29,33,27,Balanced
-341,39,49,14,Balanced
-566,9,79,8,High Energy
-312,10,41,15,Balanced
-409,34,92,21,Balanced
-319,40,83,35,High Energy
-611,25,33,29,Balanced
-514,23,72,18,High Energy
-672,20,52,12,High Energy
-421,36,58,25,High Energy
-305,46,38,34,Balanced
-551,7,22,20,Balanced
-344,18,80,39,Balanced
-329,21,58,17,High Energy
-640,40,17,34,Balanced
-438,42,87,17,High Energy
-810,28,95,33,Balanced
-323,34,87,15,High Energy
-474,45,11,29,High Energy
-651,12,54,15,Balanced
-830,11,34,38,High Energy
-860,48,13,38,Low Cal
-133,45,45,26,Balanced
-481,45,94,29,High Energy
-848,7,79,37,Balanced
-439,39,91,25,Balanced
-364,38,61,34,High Energy
-134,24,83,22,High Energy
-783,40,78,21,High Energy
-520,37,90,22,Balanced
-834,25,93,21,Balanced
-427,34,57,22,High Energy
-802,27,74,31,High Energy
-850,29,84,24,Low Cal
-364,36,63,22,Low Cal
-249,43,49,33,High Energy
-700,19,69,32,Balanced
-968,34,59,20,High Energy
-550,34,80,35,High Energy
-497,15,50,31,Low Cal
-689,29,19,31,Low Cal
-415,43,69,31,High Energy
-639,5,33,22,Low Cal
-535,43,28,27,Balanced
-280,29,23,39,Balanced
-850,24,78,23,High Energy
-230,12,82,20,High Energy
-434,10,28,38,Low Cal
-570,13,60,29,Low Cal
-573,5,95,33,Low Cal
-398,12,57,6,Balanced
-844,7,90,39,Balanced
-693,29,43,17,Low Cal
-490,32,64,27,Low Cal
-422,33,67,23,Low Cal
-187,33,49,35,Low Cal
-520,13,66,33,Low Cal
-452,12,50,21,Low Cal
-980,8,70,25,Balanced
-916,42,52,22,High Energy
-800,33,56,30,High Energy
-848,34,80,7,Balanced
-641,22,31,34,Low Cal
-375,30,24,10,High Energy
-783,42,20,22,Low Cal
-177,48,24,32,High Energy
-240,25,25,25,High Energy
-978,20,63,23,Low Cal
-892,12,92,5,High Energy
-722,26,19,37,High Energy
-148,12,40,32,High Energy
-715,33,30,18,Low Cal
-963,33,74,32,High Energy
-306,25,64,13,High Energy
-824,43,37,11,Balanced
-750,28,91,36,Low Cal
-989,9,82,14,Low Cal
-905,23,57,10,High Energy
-855,26,21,28,Balanced
-810,6,73,30,High Energy
-742,16,10,38,Balanced
-417,7,14,29,Low Cal
-550,17,61,18,Balanced
-151,15,17,30,High Energy
-238,37,19,20,Balanced
-982,13,27,26,High Energy
-868,39,21,16,High Energy
-360,25,41,13,Balanced
-160,14,36,23,Balanced
-796,29,35,35,High Energy
-243,11,74,24,High Energy
-567,31,44,32,Low Cal
-536,42,86,26,High Energy
-980,20,88,36,Balanced
-501,10,83,27,High Energy
-762,14,52,20,Low Cal
-620,47,31,27,High Energy
-265,21,62,11,Low Cal
-439,20,60,29,High Energy
-901,42,89,20,Low Cal
-180,8,25,5,Low Cal
-195,12,18,8,Low Cal
-220,15,22,9,Low Cal
-250,18,28,10,Low Cal
-275,20,30,12,Low Cal
-290,22,32,11,Low Cal
-310,25,35,13,Low Cal
-330,28,38,14,Low Cal
-350,30,40,15,Low Cal
-380,32,42,16,Low Cal
-400,35,45,17,Balanced
-420,38,48,18,Balanced
-450,40,50,20,Balanced
-480,42,52,22,Balanced
-500,45,55,24,Balanced
-520,48,58,25,Balanced
-550,50,60,28,Balanced
-580,52,62,30,Balanced
-600,55,65,32,Balanced
-630,58,68,34,Balanced
-660,60,70,36,High Energy
-700,62,72,38,High Energy
-750,65,75,40,High Energy
-800,68,78,42,High Energy
-850,70,80,45,High Energy
-900,72,82,48,High Energy
-950,75,85,50,High Energy
-1000,78,88,52,High Energy
-1050,80,90,55,High Energy
-1100,82,92,58,High Energy
-150,45,15,8,High Protein
-175,48,18,10,High Protein
-200,50,20,12,High Protein
-225,52,22,14,High Protein
-250,55,25,15,High Protein
-280,58,28,16,High Protein
-300,60,30,18,High Protein
-330,62,32,20,High Protein
-360,65,35,22,High Protein
-400,68,38,24,High Protein
-420,70,40,25,High Protein
-450,72,42,28,High Protein
-480,75,45,30,High Protein
-500,78,48,32,High Protein
-530,80,50,34,High Protein
-550,82,52,35,High Protein
-580,85,55,38,High Protein
-600,88,58,40,High Protein
-650,90,60,42,High Protein
-700,92,62,45,High Protein
-120,5,65,3,Low Fat
-140,8,70,4,Low Fat
-160,10,75,5,Low Fat
-180,12,80,6,Low Fat
-200,14,85,7,Low Fat
-220,16,90,8,Low Fat
-250,18,95,9,Low Fat
-280,20,100,10,Low Fat
-300,22,105,11,Low Fat
-320,24,110,12,Low Fat
-350,26,115,13,Low Fat
-380,28,120,14,Low Fat
-400,30,125,15,Low Fat
-420,32,130,16,Low Fat
-450,34,135,17,Low Fat
-480,36,140,18,Low Fat
-500,38,145,19,Low Fat
-520,40,150,20,Low Fat
-550,42,155,21,Low Fat
-580,44,160,22,Low Fat
-100,5,8,4,Low Cal
-115,6,10,5,Low Cal
-130,7,12,6,Low Cal
-145,8,14,7,Low Cal
-160,9,16,8,Low Cal
-175,10,18,9,Low Cal
-190,11,20,10,Low Cal
-205,12,22,11,Low Cal
-220,13,24,12,Low Cal
-235,14,26,13,Low Cal
-250,15,28,14,Low Cal
-265,16,30,15,Low Cal
-280,17,32,16,Low Cal
-295,18,34,17,Low Cal
-310,19,36,18,Low Cal
-325,20,38,19,Low Cal
-340,21,40,20,Low Cal
-355,22,42,21,Low Cal
-370,23,44,22,Low Cal
-385,24,46,23,Low Cal
-400,25,48,24,Low Cal
-415,26,50,25,Balanced
-430,27,52,26,Balanced
-445,28,54,27,Balanced
-460,29,56,28,Balanced
-475,30,58,29,Balanced
-490,31,60,30,Balanced
-505,32,62,31,Balanced
-520,33,64,32,Balanced
-535,34,66,33,Balanced
-720,25,85,35,High Energy
-780,28,90,38,High Energy
-840,30,95,42,High Energy
-920,32,100,45,High Energy
-1000,35,105,48,High Energy
-1080,38,110,52,High Energy
-200,55,12,8,High Protein
-240,60,15,10,High Protein
-280,65,18,12,High Protein
-320,70,20,14,High Protein
-360,75,22,16,High Protein
-400,80,25,18,High Protein
-440,85,28,20,High Protein
-480,90,30,22,High Protein
-130,8,60,5,Low Fat
-150,10,68,6,Low Fat
-170,12,75,7,Low Fat
-190,14,82,8,Low Fat
-210,16,88,9,Low Fat
-230,18,94,10,Low Fat
-110,6,10,3,Low Cal
-125,7,12,4,Low Cal
-140,8,14,5,Low Cal
-155,9,16,6,Low Cal
-170,10,18,7,Low Cal
-185,11,20,8,Low Cal
-450,35,45,20,Balanced
-470,37,47,21,Balanced
-490,39,49,22,Balanced
-510,41,51,23,Balanced
-530,43,53,24,Balanced
-550,45,55,25,Balanced
-570,47,57,26,Balanced
-590,49,59,27,Balanced
-610,51,61,28,Balanced
-630,53,63,29,Balanced
+252,56,9,33,Low Cal
+256,12,1,25,Low Cal
+271,23,5,27,Low Cal
+608,28,58,28,Balanced
+811,57,134,6,High Energy
+641,34,118,6,Balanced
+426,37,37,16,High Protein
+171,48,-5,29,Low Cal
+624,46,44,32,Balanced
+339,51,17,7,High Protein
+796,25,145,13,High Energy
+423,8,38,29,Balanced
+163,54,4,13,Low Cal
+714,6,124,24,High Energy
+516,11,100,12,Balanced
+184,18,-2,21,Low Cal
+711,44,111,8,High Energy
+539,58,58,8,High Protein
+626,22,73,30,Balanced
+311,14,32,18,Balanced
+420,12,53,18,Balanced
+401,44,7,25,High Protein
+487,51,11,28,High Protein
+366,49,9,33,High Protein
+214,29,3,11,Low Cal
+493,5,93,12,Balanced
+212,15,2,21,Low Cal
+824,39,88,37,High Energy
+639,43,45,32,Balanced
+350,12,35,16,Balanced
+182,52,8,27,Low Cal
+877,41,96,39,High Energy
+875,31,95,39,High Energy
+888,41,137,18,High Energy
+154,30,1,18,Low Cal
+542,19,77,19,Balanced
+703,17,78,36,High Energy
+390,56,-2,36,High Protein
+883,41,120,27,High Energy
+898,19,129,33,High Energy
+674,36,112,11,Balanced
+392,26,-4,32,Balanced
+831,49,142,10,High Energy
+177,48,8,24,Low Cal
+480,59,3,32,High Protein
+380,37,49,5,High Protein
+432,56,16,17,High Protein
+408,43,38,10,High Protein
+560,13,40,37,Balanced
+383,48,9,28,High Protein
+523,36,15,36,High Protein
+382,56,11,16,High Protein
+535,7,84,21,Balanced
+262,6,52,6,Low Cal
+715,27,65,36,High Energy
+534,23,96,6,Balanced
+833,30,97,36,High Energy
+565,59,65,8,High Protein
+352,21,3,28,Balanced
+759,10,126,26,High Energy
+660,52,63,20,Balanced
+350,10,39,20,Balanced
+809,40,114,23,High Energy
+660,23,89,24,Balanced
+638,37,75,22,Balanced
+790,15,113,32,High Energy
+622,54,49,27,Balanced
+447,39,54,11,High Protein
+293,30,24,6,Low Cal
+453,16,76,9,Low Fat
+309,59,3,13,High Protein
+248,23,-3,20,Low Cal
+553,28,29,37,Balanced
+777,15,150,12,High Energy
+571,44,52,24,High Protein
+376,52,-3,29,High Protein
+302,33,8,22,High Protein
+487,6,35,39,Balanced
+830,40,82,37,High Energy
+547,25,59,24,Balanced
+541,11,103,7,Balanced
+789,37,129,16,High Energy
+619,59,45,26,Balanced
+819,42,140,12,High Energy
+176,38,8,25,Low Cal
+758,32,73,37,High Energy
+808,8,101,39,High Energy
+661,21,80,32,Balanced
+626,50,81,10,Balanced
+894,41,126,28,High Energy
+646,50,29,35,Balanced
+849,37,120,25,High Energy
+310,7,24,22,Balanced
+884,58,149,7,High Energy
+835,28,108,36,High Energy
+812,6,131,31,High Energy
+535,30,58,21,Balanced
+542,47,18,33,High Protein
+687,39,69,29,Balanced
+674,11,98,24,Balanced
+661,50,78,20,Balanced
+620,19,60,32,Balanced
+876,26,131,29,High Energy
+724,26,91,26,High Energy
+841,46,150,10,High Energy
+203,47,2,37,Low Cal
+202,48,1,9,Low Cal
+345,10,-2,36,Balanced
+499,51,1,39,High Protein
+805,17,104,34,High Energy
+806,23,110,32,High Energy
+495,41,14,30,High Protein
+276,13,19,16,Low Cal
+790,5,115,38,High Energy
+267,52,2,29,Low Cal
+386,57,35,5,High Protein
+853,9,152,26,High Energy
+396,7,60,16,Balanced
+805,55,90,26,High Energy
+434,18,17,32,Balanced
+196,53,8,34,Low Cal
+602,16,93,20,Balanced
+623,52,48,25,Balanced
+761,37,75,34,High Energy
+172,14,6,9,Low Cal
+329,35,19,14,High Protein
+808,36,156,5,High Energy
+474,49,53,8,High Protein
+485,59,43,6,High Protein
+309,31,2,24,High Protein
+839,39,82,37,High Energy
+840,47,124,16,High Energy
+726,37,118,14,High Energy
+705,33,111,17,High Energy
+756,50,132,6,High Energy
+648,54,21,39,Balanced
+239,12,4,33,Low Cal
+751,38,123,11,High Energy
+650,54,81,15,Balanced
+525,40,25,29,High Protein
+825,14,165,13,High Energy
+341,39,-2,39,High Protein
+245,28,8,27,Low Cal
+885,41,139,16,High Energy
+844,17,136,27,High Energy
+422,53,3,24,High Protein
+491,17,49,23,Balanced
+761,16,128,23,High Energy
+414,11,28,32,Balanced
+884,56,117,23,High Energy
+516,20,85,9,Balanced
+545,29,49,25,Balanced
+714,27,109,20,High Energy
+188,49,9,18,Low Cal
+783,9,100,39,High Energy
+882,47,135,15,High Energy
+737,13,143,14,High Energy
+641,21,122,11,Balanced
+802,44,123,13,High Energy
+783,6,176,9,High Energy
+314,42,2,23,High Protein
+645,49,101,5,Balanced
+649,21,119,11,Balanced
+450,8,88,10,Balanced
+564,23,52,31,Balanced
+680,43,118,7,Balanced
+802,54,82,32,High Energy
+207,24,2,32,Low Cal
+510,43,70,5,High Protein
+497,53,8,29,High Protein
+266,10,7,36,Low Cal
+298,20,5,25,Low Cal
+378,40,-3,39,High Protein
+681,22,116,18,Balanced
+564,5,121,7,Balanced
+161,14,2,36,Low Cal
+507,16,53,28,Balanced
+522,12,44,32,Balanced
+239,12,6,32,Low Cal
+190,40,0,31,Low Cal
+294,13,-1,37,Low Cal
+873,17,136,32,High Energy
+707,39,111,10,High Energy
+405,9,23,29,Balanced
+159,34,1,9,Low Cal
+523,5,85,22,Balanced
+326,15,14,25,Balanced
+212,29,5,26,Low Cal
+838,17,105,37,High Energy
+254,39,12,5,Low Cal
+667,32,86,21,Balanced
+794,42,139,7,High Energy
+172,41,4,14,Low Cal
+232,21,8,25,Low Cal
+606,50,87,5,Balanced
+834,17,181,8,High Energy
+598,53,11,36,High Protein
+497,35,63,12,High Protein
+303,38,27,7,High Protein
+455,16,86,5,Low Fat
+385,9,18,34,Balanced
+550,52,33,27,High Protein
+378,25,25,18,Balanced
+224,55,0,38,Low Cal
+455,38,34,22,High Protein
+484,31,2,38,High Protein
+398,42,2,37,High Protein
+484,34,38,21,High Protein
+287,21,14,14,Low Cal
+657,24,76,28,Balanced
+695,10,157,6,Balanced
+275,47,-3,15,Low Cal
+260,27,9,20,Low Cal
+523,20,81,12,Balanced
+509,8,51,29,Balanced
+344,31,-4,33,High Protein
+210,55,-1,23,Low Cal
+154,22,4,32,Low Cal
+683,25,118,10,Balanced
+794,45,121,16,High Energy
+195,38,4,18,Low Cal
+222,30,9,26,Low Cal
+205,34,4,21,Low Cal
+406,12,8,39,Balanced
+841,19,140,26,High Energy
+623,32,71,27,Balanced
+365,6,25,30,Balanced
+848,55,129,11,High Energy
+772,27,120,22,High Energy
+888,55,127,19,High Energy
+780,41,86,32,High Energy
+188,21,4,26,Low Cal
+275,48,-5,29,Low Cal
+674,24,77,29,Balanced
+543,7,88,22,Balanced
+377,51,-4,26,High Protein
+772,12,133,23,High Energy
+574,41,78,10,High Protein
+431,38,46,10,High Protein
+526,37,35,26,High Protein
+859,10,194,8,High Energy
+595,34,38,35,High Protein
+286,59,-3,7,Low Cal
+692,44,75,28,Balanced
+155,6,6,24,Low Cal
+224,8,5,19,Low Cal
+267,53,2,34,Low Cal
+723,6,137,19,High Energy
+541,30,85,9,Balanced
+559,58,60,8,High Protein
+873,37,122,24,High Energy
+289,51,14,5,Low Cal
+803,42,134,15,High Energy
+408,37,38,10,High Protein
+159,9,4,27,Low Cal
+321,6,38,17,Balanced
+791,24,171,5,High Energy
+762,13,133,21,High Energy
+699,59,36,39,Balanced
+244,53,8,9,Low Cal
+385,54,0,18,High Protein
+525,15,83,13,Balanced
+737,39,52,39,High Energy
+445,26,13,33,Balanced
+378,18,-3,34,Balanced
+874,41,154,9,High Energy
+528,18,54,30,Balanced
+281,29,-4,29,Low Cal
+445,12,55,18,Balanced
+786,42,72,37,High Energy
+724,19,81,37,High Energy
+294,37,31,6,Low Cal
+765,44,124,10,High Energy
+728,11,148,12,High Energy
+597,56,59,19,High Protein
+818,37,92,34,High Energy
+569,33,33,37,High Protein
+560,59,8,37,High Protein
+345,26,50,6,Low Fat
+666,14,69,37,Balanced
+308,51,-2,28,High Protein
+845,19,120,33,High Energy
+410,33,57,8,High Protein
+834,6,141,31,High Energy
+776,55,76,30,High Energy
+432,9,50,24,Balanced
+403,14,66,10,Balanced
+172,51,8,30,Low Cal
+512,16,51,30,Balanced
+765,22,99,29,High Energy
+772,44,119,16,High Energy
+505,52,55,8,High Protein
+276,46,9,32,Low Cal
+527,13,52,33,Balanced
+445,45,12,26,High Protein
+556,5,81,25,Balanced
+771,40,95,27,High Energy
+150,58,-1,19,Low Cal
+580,13,106,13,Balanced
+585,57,24,30,High Protein
+724,56,63,29,High Energy
+224,42,1,6,Low Cal
+359,31,5,38,High Protein
+678,47,62,28,Balanced
+329,10,4,28,Balanced
+326,33,4,26,High Protein
+305,54,-5,25,High Protein
+233,45,0,24,Low Cal
+491,32,61,11,High Protein
+885,17,128,34,High Energy
+584,23,50,36,Balanced
+434,53,8,33,High Protein
+293,44,-4,23,Low Cal
+739,55,116,6,High Energy
+262,54,0,34,Low Cal
+793,5,173,12,High Energy
+204,43,4,7,Low Cal
+607,23,49,38,Balanced
+236,59,-4,32,Low Cal
+540,33,70,12,High Protein
+462,59,42,7,High Protein
+592,12,117,7,Balanced
+758,32,126,12,High Energy
+245,28,2,18,Low Cal
+640,20,120,8,Balanced
+314,58,8,25,High Protein
+884,59,113,22,High Energy
+479,11,26,37,Balanced
+234,23,-2,23,Low Cal
+434,22,68,6,Low Fat
+858,24,160,15,High Energy
+535,7,67,27,Balanced
+545,24,91,9,Balanced
+405,34,34,13,High Protein
+202,48,-2,39,Low Cal
+655,26,69,28,Balanced
+863,34,116,27,High Energy
+264,21,7,18,Low Cal
+701,6,105,29,High Energy
+350,58,5,26,High Protein
+643,8,89,30,Balanced
+178,49,1,38,Low Cal
+224,10,-1,22,Low Cal
+191,40,-5,38,Low Cal
+826,29,142,16,High Energy
+778,46,89,26,High Energy
+176,35,5,10,Low Cal
+317,38,12,16,High Protein
+604,14,93,21,Balanced
+625,50,98,6,Balanced
+512,5,62,30,Balanced
+298,15,23,15,Low Cal
+262,43,0,39,Low Cal
+247,59,0,28,Low Cal
+555,9,50,37,Balanced
+697,51,66,24,Balanced
+888,56,126,21,High Energy
+656,49,32,38,Balanced
+303,6,43,13,Balanced
+445,21,82,5,Low Fat
+210,47,1,29,Low Cal
+280,54,0,34,Low Cal
+673,23,102,21,Balanced
+718,59,92,16,High Energy
+741,28,107,23,High Energy
+810,21,119,27,High Energy
+523,20,90,10,Balanced
+686,22,90,29,Balanced
+804,30,112,30,High Energy
+437,14,51,20,Balanced
+550,27,42,30,Balanced
+235,11,16,18,Low Cal
+778,11,151,13,High Energy
+837,12,143,27,High Energy
+743,35,72,34,High Energy
+551,46,52,21,High Protein
+308,28,6,39,Balanced
+337,49,-3,38,High Protein
+320,44,1,30,High Protein
+513,43,44,19,High Protein
+646,8,79,33,Balanced
+546,22,38,37,Balanced
+575,48,83,6,High Protein
+888,46,98,38,High Energy
+400,59,9,17,High Protein
+423,36,-3,36,High Protein
+188,50,8,33,Low Cal
+626,57,56,20,Balanced
+897,51,149,14,High Energy
+508,24,77,9,Balanced
+838,7,164,18,High Energy
+819,54,128,8,High Energy
+442,29,69,5,Low Fat
+734,19,99,28,High Energy
+289,41,9,10,Low Cal
+589,50,39,28,High Protein
+211,17,3,38,Low Cal
+860,56,146,8,High Energy
+733,24,94,33,High Energy
+459,57,31,14,High Protein
+375,30,50,7,Low Fat
+666,9,91,27,Balanced
+670,39,78,24,Balanced
+722,46,42,39,High Energy
+211,21,-3,28,Low Cal
+309,39,2,17,High Protein
+238,13,36,8,Low Cal
+506,38,57,15,High Protein
+472,32,14,33,High Protein
+344,29,6,38,Balanced
+319,13,26,19,Balanced
+686,9,133,15,Balanced
+375,28,23,19,Balanced
+477,9,38,30,Balanced
+603,41,77,17,Balanced
+742,54,58,36,High Energy
+498,55,55,7,High Protein
+189,38,7,31,Low Cal
+898,37,167,10,High Energy
+296,20,-5,32,Low Cal
+720,52,94,17,High Energy
+706,29,77,31,High Energy
+849,11,186,9,High Energy
+706,55,43,35,High Energy
+575,14,53,36,Balanced
+586,34,29,35,High Protein
+505,6,86,18,Balanced
+673,43,118,6,Balanced
+195,31,2,21,Low Cal
+372,38,7,28,High Protein
+824,52,128,10,High Energy
+563,11,101,14,Balanced
+373,38,6,32,High Protein
+484,34,12,33,High Protein
+345,24,-2,36,Balanced
+391,8,15,31,Balanced
+673,26,99,21,Balanced
+854,26,122,30,High Energy
+359,54,9,18,High Protein
+434,16,2,39,Balanced
+530,16,98,11,Balanced
+182,10,-3,19,Low Cal
+608,27,53,30,Balanced
+579,38,30,33,High Protein
+248,17,3,19,Low Cal
+306,15,-4,36,Balanced
+836,18,137,24,High Energy
+608,31,100,7,Balanced
+531,48,19,32,High Protein
+170,51,-1,20,Low Cal
+233,10,3,23,Low Cal
+602,7,136,5,Balanced
+676,38,38,39,Balanced
+673,22,109,19,Balanced
+357,31,37,12,High Protein
+579,29,75,21,Balanced
+458,12,64,19,Balanced
+835,54,127,11,High Energy
+498,48,19,28,High Protein
+527,7,78,24,Balanced
+676,29,71,34,Balanced
+604,21,74,24,Balanced
+670,42,67,26,Balanced
+650,57,94,6,Balanced
+733,15,125,17,High Energy
+221,25,8,22,Low Cal
+469,22,16,35,Balanced
+693,15,88,29,Balanced
+251,45,5,12,Low Cal
+363,55,3,28,High Protein
+550,16,49,36,Balanced
+741,58,74,26,High Energy
+809,37,135,14,High Energy
+391,37,42,6,High Protein
+894,17,125,34,High Energy
+738,56,61,30,High Energy
+252,6,8,30,Low Cal
+271,54,-4,19,Low Cal
+255,59,7,15,Low Cal
+784,10,156,13,High Energy
+222,43,3,35,Low Cal
+519,16,88,12,Balanced
+839,32,131,24,High Energy
+260,11,18,15,Low Cal
+357,8,62,10,Balanced
+171,30,9,7,Low Cal
+849,46,130,18,High Energy
+161,27,7,16,Low Cal
+686,49,71,23,Balanced
+899,40,164,12,High Energy
+780,57,54,36,High Energy
+743,10,123,22,High Energy
+811,41,82,36,High Energy
+208,7,4,32,Low Cal
+184,33,-5,19,Low Cal
+481,53,-1,34,High Protein
+308,28,-1,24,Balanced
+665,32,86,24,Balanced
+301,54,3,36,High Protein
+569,57,-2,38,High Protein
+727,19,75,38,High Energy
+444,46,26,16,High Protein
+386,22,27,25,Balanced
+886,39,117,30,High Energy
+249,52,1,34,Low Cal
+447,48,31,18,High Protein
+151,59,0,9,Low Cal
+702,58,79,18,High Energy
+380,29,8,24,Balanced
+892,10,170,21,High Energy
+177,6,-1,39,Low Cal
+410,5,63,16,Balanced
+825,49,105,27,High Energy
+436,15,59,14,Balanced
+779,18,135,20,High Energy
+754,14,146,16,High Energy
+510,5,100,9,Balanced
+832,16,183,5,High Energy
+725,58,75,24,High Energy
+270,47,-1,16,Low Cal
+454,53,9,32,High Protein
+868,10,149,24,High Energy
+483,6,94,13,Balanced
+442,24,26,30,Balanced
+150,59,0,39,Low Cal
+634,57,76,9,Balanced
+840,18,160,16,High Energy
+425,57,5,28,High Protein
+275,38,-4,29,Low Cal
+334,43,2,35,High Protein
+644,47,59,27,Balanced
+443,24,34,27,Balanced
+457,20,63,12,Balanced
+490,5,97,12,Balanced
+501,42,72,9,High Protein
+235,51,-5,38,Low Cal
+460,59,5,30,High Protein
+563,54,32,22,High Protein
+687,12,128,16,Balanced
+494,50,50,8,High Protein
+150,23,8,35,Low Cal
+202,52,3,9,Low Cal
+751,32,138,6,High Energy
+853,10,169,13,High Energy
+830,29,143,17,High Energy
+738,35,113,15,High Energy
+759,42,129,8,High Energy
+168,10,-4,38,Low Cal
+546,45,27,27,High Protein
+514,15,104,5,Balanced
+604,29,74,25,Balanced
+214,16,21,11,Low Cal
+754,29,71,37,High Energy
+885,53,86,39,High Energy
+251,30,-3,15,Low Cal
+771,18,139,14,High Energy
+152,25,2,30,Low Cal
+599,10,66,32,Balanced
+370,30,6,29,Balanced
+282,38,6,19,Low Cal
+889,19,142,27,High Energy
+647,48,58,25,Balanced
+768,59,97,20,High Energy
+266,19,-2,29,Low Cal
+864,55,116,19,High Energy
+290,26,-4,23,Low Cal
+483,8,50,31,Balanced
+305,39,14,12,High Protein
+569,34,54,22,High Protein
+738,8,112,30,High Energy
+499,15,94,11,Balanced
+257,14,21,17,Low Cal
+732,53,74,24,High Energy
+534,48,48,17,High Protein
+267,25,6,26,Low Cal
+175,13,4,19,Low Cal
+527,46,60,12,High Protein
+869,53,101,30,High Energy
+442,8,36,28,Balanced
+761,43,118,14,High Energy
+295,23,14,14,Low Cal
+588,54,81,9,High Protein
+710,39,48,38,High Energy
+780,25,122,21,High Energy
+581,41,58,19,High Protein
+604,36,85,15,Balanced
+739,17,98,29,High Energy
+469,39,52,11,High Protein
+807,7,162,15,High Energy
+429,50,3,23,High Protein
+367,42,1,36,High Protein
+770,50,57,37,High Energy
+222,12,5,37,Low Cal
+219,45,7,8,Low Cal
+710,6,157,9,High Energy
+688,36,81,25,Balanced
+379,12,67,7,Low Fat
+530,7,67,26,Balanced
+279,27,29,6,Low Cal
+358,39,1,38,High Protein

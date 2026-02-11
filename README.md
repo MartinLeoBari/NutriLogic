@@ -1,80 +1,56 @@
 # NutriLogic
 
-NutriLogic è un sistema progettato per generare piani alimentari su misura. L'approccio combina tre tecniche distinte per offrire risultati accurati:
+NutriLogic è un Sistema Intelligente per la pianificazione pasto personalizzata che integra:
+1.  **Knowledge Base (Prolog)**: Gestisce regole dietetiche, allergie e conoscenza degli ingredienti (Programmazione Logica).
+2.  **Machine Learning (Scikit-learn)**: Classifica le ricette in base al contenuto nutrizionale (Apprendimento Supervisionato).
+3.  **Constraint Satisfaction Problem (CSP)**: Genera piani alimentari giornalieri ottimali che soddisfano i vincoli dell'utente.
 
-*   **Machine Learning**: Il modulo `ml_classifier.py` utilizza alberi decisionali e KNN per classificare le ricette in base ai loro valori nutrizionali (calibra se un piatto è energetico, bilanciato o ipocalorico).
-*   **Programmazione Logica**: Tramite `knowledge_base.pl` (basato su SWI-Prolog), il sistema gestisce le conoscenze su ingredienti e intolleranze, deducendo logicamente proprietà implicite (come identificare se un piatto è vegano o privo di lattosio).
-*   **Constraint Satisfaction Problem (CSP)**: Il cuore del sistema è `csp_planner.py`, che calcola la combinazione ottimale di colazione, pranzo e cena rispettando sia i vincoli calorici matematici che le preferenze dell'utente.
+## Componenti del Sistema
 
----
+### 1. Knowledge Base (`knowledge_base.pl`)
+-   **Paradigma**: Programmazione Logica (Clausole di Horn).
+-   **Funzionalità**:
+    -   Ragionamento su esigenze dietetiche specifiche (es. `safe_for(Recipe, lactose)`).
+    -   Inferenza sulle proprietà degli ingredienti (es. `is_vegan/1`).
+    -   Regole avanzate per Stagionalità e composizione del Piatto Completo.
 
-## Guida all'Installazione
+### 2. Machine Learning (`ml_classifier.py`)
+-   **Obiettivo**: Classificare le ricette in categorie salutari (`Bilanciato`, `Alto Proteico`, `Basse Calorie`, ecc.).
+-   **Metodologia**:
+    -   **Dataset**: 600+ istanze sintetiche realistiche.
+    -   **Valutazione**: Nested Cross-Validation (Outer 5-Fold, Inner 3-Fold).
+    -   **Metriche**: Accuracy, Precision, Recall, F1-Score.
 
-Ecco i passaggi per configurare l'ambiente su un computer Windows pulito.
+### 3. Pianificatore di Diete (`csp_planner.py`)
+-   **Paradigma**: Programmazione a Vincoli (Constraint Programming).
+-   **Solver**: `python-constraint` (Backtracking con Forward Checking/Arc Consistency) vs Backtracking Custom.
 
-### 1. Requisiti Python
-Assicurati di avere **Python 3** (versione 3.10 o superiore) installato. Se non lo hai, scaricalo dal [sito ufficiale](https://www.python.org/downloads/).
-*   **Nota fondamentale:** Durante l'installazione, ricorda di spuntare la casella **"Add Python to PATH"**.
+#### Definizione Formale CSP
+Il problema della pianificazione dei pasti è modellato come una tupla CSP $<V, D, C>$:
 
-### 2. Configurazione SWI-Prolog
-Il modulo logico si basa su SWI-Prolog. Senza di esso, quella parte del programma non funzionerà.
+*   **Variabili ($V$)**: L'insieme dei pasti da assegnare.
+    *   $V = \{M_1, M_2, \dots, M_k\}$ dove $k$ è il numero di pasti (es. Colazione, Pranzo, Cena).
+*   **Domini ($D$)**: L'insieme delle ricette valide per ogni variabile.
+    *   $D(v_i) \subseteq \{r \in \text{Ricette} \mid r.\text{tipo} = \text{tipo}(v_i) \land \text{sicuro\_per}(r, \text{intolleranze\_utente})\}$
+*   **Vincoli ($C$)**:
+    *   **Vincoli Hard** (Devono essere ottimizzati/soddisfatti):
+        -   **Vincolo Calorico Globale**: $| \sum_{v \in V} \text{cal}(v) - \text{Target} | \le \text{Tolleranza}$
+        -   **Vincolo di Varietà**: $\text{AllDifferent}(Pranzo, Cena)$
+    *   **Vincoli Soft** (Modellati come preferenze o limiti ampi):
+        -   Target nutrizionali (Min Proteine, Max Grassi).
 
-**Su Windows:**
-1.  Scarica la versione **"Microsoft Windows 64-bit"** da [swi-prolog.org](https://www.swi-prolog.org/download/stable).
-2.  Avvia l'installazione.
-3.  Quando richiesto, seleziona l'opzione **"Add swipl to the system PATH for all users"** (o "current user"). Questo passaggio è essenziale per permettere a Python di comunicare con Prolog.
-
-**Su macOS:**
-L'approccio più semplice è usare Homebrew. Apri il terminale e digita:
-```bash
-brew install swi-prolog
-```
-Se invece usi il file `.dmg`, dovrai aggiungere manualmente SWI-Prolog al tuo PATH (es. nel file `.zshrc`), altrimenti Python non troverà l'eseguibile.
-
-### 3. Setup del Progetto
-Scarica la cartella del progetto e posizionati al suo interno tramite terminale.
-
-### 4. Installazione Dipendenze
-Per installare tutte le librerie necessarie, esegui questo comando nel terminale:
-
-```bash
-pip install pandas scikit-learn pyswip python-constraint numpy
-```
-*Se riscontri errori con `pyswip`, assicurati che SWI-Prolog sia installato correttamente e aggiunto al PATH.*
-
----
-
-## Come Usare NutriLogic
-
-Hai due modalità per utilizzare il software.
-
-### A. Interfaccia Grafica (Consigliata)
-Per un'esperienza più intuitiva, avvia la GUI.
-1.  Apri il terminale nella cartella del progetto.
-2.  Esegui:
+## Come Eseguire
+1.  **Installare le dipendenze**:
     ```bash
-    python gui.py
+    pip install pandas numpy scikit-learn pyswip python-constraint
     ```
-    (o `python3 gui.py` su macOS/Linux)
+    *(Nota: `pyswip` richiede SWI-Prolog installato nel sistema).*
 
-Dall'interfaccia potrai inserire i tuoi dati, calcolare il tuo fabbisogno calorico e generare la dieta cliccando sui pulsanti dedicati.
-
-### B. Linea di Comando
-Se preferisci vedere il funzionamento "dietro le quinte" o testare l'algoritmo rapidamente:
-1.  Apri il terminale nella cartella del progetto.
-2.  Esegui:
+2.  **Eseguire il Sistema**:
     ```bash
     python main.py
     ```
-
-Il sistema eseguirà una simulazione predefinita: addestrerà il modello, caricherà la base di conoscenza e genererà un menu di esempio da 1000 kcal per un utente intollerante al lattosio.
-
----
-
-## Risoluzione Problemi
-
-**Errore "Libreria python-constraint non trovata"** o simili:
-Probabilmente hai saltato l'installazione delle dipendenze. Riprova con `pip install python-constraint`.
-
-**Errore legato a PySWIP o Prolog:**
-Se vedi errori che menzionano DLL mancanti o Prolog non trovato, al 99% il problema è che SWI-Prolog non è nel PATH di sistema. Reinstalla SWI-Prolog assicurandoti di spuntare "Add to PATH" o aggiungilo manualmente alle variabili d'ambiente.
+    Questo comando:
+    -   Addestrerà il modello ML (e salverà `report_esperimenti.md`).
+    -   Caricherà la Knowledge Base Prolog (se disponibile).
+    -   Eseguirà il CSP Planner e confronterà i solver.

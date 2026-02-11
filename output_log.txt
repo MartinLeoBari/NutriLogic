@@ -1,0 +1,42 @@
+=== NutriLogic System Started ===
+
+[ML Module] Training Classificatore Ricette...
+
+=== Valutazione Modelli (Nested Cross-Validation) ===
+Modello: KNN -> Nested CV Accuracy: 0.68 (+/- 0.04)
+Modello: DecisionTree -> Nested CV Accuracy: 0.57 (+/- 0.11)
+
+Modello scelto per il deployment: KNN
+Migliori parametri: {'n_neighbors': 3}
+
+Report Classificazione (Test Set):
+              precision    recall  f1-score   support
+
+    Balanced       0.75      0.56      0.64        16
+ High Energy       0.55      0.46      0.50        13
+High Protein       0.80      1.00      0.89         4
+     Low Cal       0.60      0.90      0.72        10
+     Low Fat       1.00      1.00      1.00         5
+
+    accuracy                           0.69        48
+   macro avg       0.74      0.78      0.75        48
+weighted avg       0.69      0.69      0.68        48
+
+Nuova ricetta classificata come: High Energy
+
+[KB Module] Caricamento regole logiche...
+Utente intollerante a: ['lactose']
+
+[CSP Module] Generazione Piano Alimentare...
+
+--- Confronto Solver (Target: 1000 kcal, Pasti: 3) ---
+CSP Solver: Tempo = 0.0023s, Scarto Calorie = 0
+Random Baseline: Tempo = 0.0045s, Scarto Calorie = 0
+
+=== Piano Giornaliero Suggerito ===
+Lunch: Pollo alle Mandorle (450 kcal)
+Dinner: Falafel (6 pz) (350 kcal)
+Snack: Frutta Secca Mix (40g) (200 kcal)
+
+Totale Calorie: 1000
+Proteine: 55g | Carboidrati: 65g | Grassi: 62g | Fibre: 11g

@@ -1,85 +1,166 @@
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split, cross_val_score
+import os
+from sklearn.model_selection import train_test_split, StratifiedKFold, GridSearchCV, cross_validate
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.preprocessing import StandardScaler, LabelEncoder
+from sklearn.metrics import classification_report, confusion_matrix, make_scorer, f1_score
 
 class RecipeClassifier:
     def __init__(self, dataset_path):
         self.dataset_path = dataset_path
         self.model = None
         self.scaler = StandardScaler()
+        self.label_encoder = LabelEncoder()
+
+    def _generate_realistic_data(self, n_samples=600):
+        """Genera dataset sintetico controllato per il training."""
+        np.random.seed(42)
+
+        data = []
+        labels = []
+
+        for _ in range(n_samples):
+            # Genera macronutrienti base
+            calories = np.random.randint(150, 900)
+            protein = np.random.randint(5, 60)
+            fat = np.random.randint(5, 40)
+            # Carbs sono approssimativamente il resto (semplificato)
+            # 1g prot=4kcal, 1g fat=9kcal, 1g carb=4kcal
+            # carbs = (calories - (prot*4 + fat*9)) / 4
+            remaining_cal = calories - (protein * 4 + fat * 9)
+            carbs = max(0, int(remaining_cal / 4))
+
+            # Aggiunge un po' di rumore
+            carbs += np.random.randint(-5, 10)
+
+            # Logica di assegnazione etichetta basata su profili nutrizionali standard
+            if calories < 300:
+                label = 'Low Cal'
+            elif protein > 30 and calories < 600:
+                label = 'High Protein'
+            elif fat < 10 and calories < 500:
+                label = 'Low Fat'
+            elif calories > 700:
+                label = 'High Energy'
+            else:
+                label = 'Balanced'
+
+            data.append([calories, protein, carbs, fat])
+            labels.append(label)
+
+        df = pd.DataFrame(data, columns=['calories', 'protein', 'carbs', 'fat'])
+        df['health_label'] = labels
+        return df
 
     def train_and_evaluate(self):
-        # 1. Carico i dati
-        # Se non c'è il file o è vuoto (!), invento dei dati sintetici.
-        generate_synthetic = False
-        try:
-            df = pd.read_csv(self.dataset_path)
-            if len(df) < 20:
-                print(f"Pochi dati ({len(df)}). Ne genero di nuovi...")
-                generate_synthetic = True
-        except FileNotFoundError:
-            print("Dataset non trovato. Ne creo uno al volo...")
-            generate_synthetic = True
+        print("--- Avvio Procedura di Training e Validazione ---")
 
-        if generate_synthetic:
-            # Codice generazione dati... omitto per pulizia
-            pass
-
-        # ... (Salvataggio se generato) ...
-        # Se abbiamo generato sintetico sopra e non salvato, qui darebbe errore se non gestito.
-        # Ma presumo il codice originale avesse la generazione qui.
-        # Ripristino il blocco generazione per sicurezza nel replace.
-        if generate_synthetic:
-            data = {
-                'calories': np.random.randint(100, 1000, 100),
-                'protein': np.random.randint(5, 50, 100),
-                'carbs': np.random.randint(10, 100, 100),
-                'fat': np.random.randint(5, 40, 100),
-                'health_label': np.random.choice(['Low Cal', 'Balanced', 'High Energy'], 100)
-            }
-            df = pd.DataFrame(data)
+        # 1. Gestione Dataset
+        if not os.path.exists(self.dataset_path):
+            print(f"Dataset non trovato. Genero {600} istanze realistiche...")
+            df = self._generate_realistic_data(600)
             df.to_csv(self.dataset_path, index=False)
+        else:
+            df = pd.read_csv(self.dataset_path)
+            if len(df) < 500:
+                print(f"Dataset insufficiente ({len(df)} righe). Rigenerazione dataset esteso (600 righe).")
+                df = self._generate_realistic_data(600)
+                df.to_csv(self.dataset_path, index=False)
 
+        # 2. Preprocessing
         X = df[['calories', 'protein', 'carbs', 'fat']]
         y = df['health_label']
 
-        # 2. Preparo i dati (standardizzazione)
         X_scaled = self.scaler.fit_transform(X)
+        # Encoding labels per scikit-learn (opzionale ma consigliato)
+        y_encoded = self.label_encoder.fit_transform(y)
 
-        # 3. Provo diversi modelli (KNN vs Decision Tree)
-        models = {
-            'KNN': KNeighborsClassifier(n_neighbors=5),
-            'DecisionTree': DecisionTreeClassifier(max_depth=5, random_state=42)
+        # 3. Disegno Sperimentale: Nested Cross-Validation
+        # Outer Loop: Valutazione Performance (Stratified 5-Fold)
+        # Inner Loop: Model Selection / Tuning (GridSearch 3-Fold)
+
+        outer_cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+        inner_cv = StratifiedKFold(n_splits=3, shuffle=True, random_state=42)
+
+        # Griglie Iperparametri
+        dt_params = {
+            'max_depth': [3, 5, 8, 12, None],
+            'min_samples_split': [2, 5, 10],
+            'criterion': ['gini', 'entropy']
         }
 
-        results = {}
-        for name, model in models.items():
-            # Controllo quanto sono affidabili (Cross Validation)
-            scores = cross_val_score(model, X_scaled, y, cv=5)
-            results[name] = {
-                'mean_accuracy': scores.mean(),
-                'std_dev': scores.std()
-            }
-            print(f"Modello: {name} -> Accuracy: {scores.mean():.2f} (+/- {scores.std():.2f})")
+        knn_params = {
+            'n_neighbors': [3, 5, 7, 9, 11, 15],
+            'weights': ['uniform', 'distance'],
+            'metric': ['euclidean', 'manhattan']
+        }
 
-        # 4. Scelgo l'albero decisionale come modello finale
-        self.model = models['DecisionTree']
-        X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
-        self.model.fit(X_train, y_train)
+        models = {
+            'DecisionTree': GridSearchCV(DecisionTreeClassifier(random_state=42), dt_params, cv=inner_cv, scoring='f1_macro'),
+            'KNN': GridSearchCV(KNeighborsClassifier(), knn_params, cv=inner_cv, scoring='f1_macro')
+        }
 
-        y_pred = self.model.predict(X_test)
-        print("\nReport Classificazione (Test Set):")
-        print(classification_report(y_test, y_pred))
+        report_lines = ["# Report Esperimenti Machine Learning\n"]
+        report_lines.append(f"Dataset: {len(df)} istanze sintetiche. Features: [Calories, Protein, Carbs, Fat]. Target: 'health_label'.\n")
+        report_lines.append("Metodologia: Nested Cross-Validation (Outer: 5-Fold, Inner: 3-Fold GridSearch).\n")
+
+        best_overall_model = None
+        best_overall_score = -1
+        best_name = ""
+
+        print("\nEsecuzione Nested Cross-Validation...")
+
+        for name, grid_clf in models.items():
+            # cross_validate per ottenere metriche multiple sull'Outer Loop
+            scoring_metrics = ['accuracy', 'precision_macro', 'recall_macro', 'f1_macro']
+            cv_results = cross_validate(grid_clf, X_scaled, y_encoded, cv=outer_cv, scoring=scoring_metrics)
+
+            mean_acc = cv_results['test_accuracy'].mean()
+            mean_f1 = cv_results['test_f1_macro'].mean()
+            std_f1 = cv_results['test_f1_macro'].std()
+
+            print(f"Modello {name} -> F1 Macro: {mean_f1:.3f} (+/- {std_f1:.3f}) | Accuracy: {mean_acc:.3f}")
+
+            report_lines.append(f"## Modello: {name}")
+            report_lines.append(f"- **Accuratezza Media**: {mean_acc:.3f}")
+            report_lines.append(f"- **F1-Score Macro Medio**: {mean_f1:.3f} (+/- {std_f1:.3f})")
+            report_lines.append(f"- **Precision Macro**: {cv_results['test_precision_macro'].mean():.3f}")
+            report_lines.append(f"- **Recall Macro**: {cv_results['test_recall_macro'].mean():.3f}\n")
+
+            if mean_f1 > best_overall_score:
+                best_overall_score = mean_f1
+                best_overall_model = grid_clf # Questo è un GridSearchCV object
+                best_name = name
+
+        # 4. Training Finale sul Modello Migliore
+        # Addestriamo il GridSearch su tutto il dataset per trovare i parametri ottimi finali
+        print(f"\nTraining finale modello scelto ({best_name}) su tutto il dataset...")
+        best_overall_model.fit(X_scaled, y_encoded)
+
+        self.model = best_overall_model.best_estimator_
+        best_params = best_overall_model.best_params_
+        print(f"Migliori Parametri Trovati: {best_params}")
+
+        report_lines.append(f"## Conclusioni")
+        report_lines.append(f"Il modello selezionato è **{best_name}** con i seguenti parametri ottimi (trovati su tutto il dataset):")
+        report_lines.append(f"```json\n{best_params}\n```")
+
+        # Scrittura Report
+        with open("report_esperimenti.md", "w") as f:
+            f.writelines("\n".join(report_lines))
+        print("Report salvato in 'report_esperimenti.md'.")
 
     def predict(self, features):
-        # Serve una lista di caratteristiche: [[cal, prot, carbs, fat]]
         if self.model:
             df_features = pd.DataFrame(features, columns=['calories', 'protein', 'carbs', 'fat'])
             features_scaled = self.scaler.transform(df_features)
-            return self.model.predict(features_scaled)
+            pred_encoded = self.model.predict(features_scaled)
+            return self.label_encoder.inverse_transform(pred_encoded)
         else:
             return ["Modello non pronto"]
+
+if __name__ == '__main__':
+    classifier = RecipeClassifier('dataset_ricette.csv')
+    classifier.train_and_evaluate()
