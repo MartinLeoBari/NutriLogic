@@ -15,43 +15,43 @@ class RecipeClassifier:
         self.label_encoder = LabelEncoder()
 
     def _generate_realistic_data(self, n_samples=600):
-        """Genera dataset sintetico controllato per il training."""
+        """Genera dataset sintetico controllato BILANCIATO per il training."""
         np.random.seed(42)
-
         data = []
         labels = []
 
-        for _ in range(n_samples):
-            # Genera macronutrienti base
-            calories = np.random.randint(150, 900)
-            protein = np.random.randint(5, 60)
-            fat = np.random.randint(5, 40)
-            # Carbs sono approssimativamente il resto (semplificato)
-            # 1g prot=4kcal, 1g fat=9kcal, 1g carb=4kcal
-            # carbs = (calories - (prot*4 + fat*9)) / 4
-            remaining_cal = calories - (protein * 4 + fat * 9)
-            carbs = max(0, int(remaining_cal / 4))
+        # Target: ~120 samples per class (5 classes)
+        samples_per_class = n_samples // 5
 
-            # Aggiunge un po' di rumore
-            carbs += np.random.randint(-5, 10)
+        # Generazione guidata per classe per garantire il bilanciamento
+        classes_definitions = {
+            'Low Cal': {'cal': (150, 300), 'prot': (5, 20), 'fat': (0, 10)},
+            'High Protein': {'cal': (300, 600), 'prot': (30, 60), 'fat': (5, 20)},
+            'Low Fat': {'cal': (200, 500), 'prot': (10, 30), 'fat': (0, 5)},
+            'High Energy': {'cal': (700, 1000), 'prot': (15, 30), 'fat': (20, 45)},
+            'Balanced': {'cal': (400, 700), 'prot': (15, 25), 'fat': (10, 20)}
+        }
 
-            # Logica di assegnazione etichetta basata su profili nutrizionali standard
-            if calories < 300:
-                label = 'Low Cal'
-            elif protein > 30 and calories < 600:
-                label = 'High Protein'
-            elif fat < 10 and calories < 500:
-                label = 'Low Fat'
-            elif calories > 700:
-                label = 'High Energy'
-            else:
-                label = 'Balanced'
+        for label, ranges in classes_definitions.items():
+            for _ in range(samples_per_class):
+                # Genera features conformi alla definizione
+                calories = np.random.randint(ranges['cal'][0], ranges['cal'][1])
+                protein = np.random.randint(ranges['prot'][0], ranges['prot'][1])
+                fat = np.random.randint(ranges['fat'][0], ranges['fat'][1])
 
-            data.append([calories, protein, carbs, fat])
-            labels.append(label)
+                # Calcola carbs residui
+                remaining_cal = calories - (protein * 4 + fat * 9)
+                carbs = max(0, int(remaining_cal / 4))
+                # Add noise
+                carbs += np.random.randint(-5, 5)
+
+                data.append([calories, protein, carbs, fat])
+                labels.append(label)
 
         df = pd.DataFrame(data, columns=['calories', 'protein', 'carbs', 'fat'])
         df['health_label'] = labels
+        # Shuffle finale
+        df = df.sample(frac=1, random_state=42).reset_index(drop=True)
         return df
 
     def train_and_evaluate(self):
@@ -64,6 +64,10 @@ class RecipeClassifier:
             df.to_csv(self.dataset_path, index=False)
         else:
             df = pd.read_csv(self.dataset_path)
+            # Verifica Bilanciamento
+            print("\nDistribuzione Classi (Dataset):")
+            print(df['health_label'].value_counts())
+
             if len(df) < 500:
                 print(f"Dataset insufficiente ({len(df)} righe). Rigenerazione dataset esteso (600 righe).")
                 df = self._generate_realistic_data(600)
@@ -103,7 +107,7 @@ class RecipeClassifier:
         }
 
         report_lines = ["# Report Esperimenti Machine Learning\n"]
-        report_lines.append(f"Dataset: {len(df)} istanze sintetiche. Features: [Calories, Protein, Carbs, Fat]. Target: 'health_label'.\n")
+        report_lines.append(f"Dataset: {len(df)} istanze (Bilanciato). Features: [Calories, Protein, Carbs, Fat]. Target: 'health_label'.\n")
         report_lines.append("Metodologia: Nested Cross-Validation (Outer: 5-Fold, Inner: 3-Fold GridSearch).\n")
 
         best_overall_model = None
@@ -162,5 +166,9 @@ class RecipeClassifier:
             return ["Modello non pronto"]
 
 if __name__ == '__main__':
-    classifier = RecipeClassifier('dataset_ricette.csv')
+    # Cancella il vecchio dataset se esiste per forzare la rigenerazione bilanciata
+    if os.path.exists('dataset.csv'):
+        os.remove('dataset.csv')
+
+    classifier = RecipeClassifier('dataset.csv')
     classifier.train_and_evaluate()

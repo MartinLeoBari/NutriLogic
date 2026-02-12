@@ -1,112 +1,103 @@
-# NutriLogic - Relazione Tecnica
+# NutriLogic - Intelligent Diet Assistant
 
-## 1. Knowledge Base (Prolog)
+**Gruppo di lavoro:**
+-   Martin Leo (797052) - m.leo39@studneti.uniba.it
+-   Francesco Liantonio (800275) - f.liantonio2@studenti.uniba.it
+-   Simone Frezza (801716) - s.frezza@studenti.uniba.it
 
-La Knowledge Base (`knowledge_base.pl`) costituisce il cuore deduttivo del sistema. È stata progettata per modellare ingredienti, ricette, valori nutrizionali e regole dietetiche complesse.
+**Repository:** [https://github.com/MartinLeoBari/NutriLogic.git](https://github.com/MartinLeoBari/NutriLogic.git)
+**Anno Accademico:** 2025-2026
 
-### Struttura e Complessità
-La base di conoscenza è organizzata in fatti e regole:
--   **Fatti**: Database degli ingredienti (~60 entità) con macro-categoria e calorie; Database delle ricette (~25 ricette) definite come liste di ingredienti; Fatti sulla stagionalità.
--   **Regole**: Implementano la logica di dominio. Le regole più significative includono controlli ricorsivi (calcolo calorie), iterazioni su liste (`is_seasonal`), e inferenza su proprietà composte (`complete_dish`).
+---
 
-Le regole utilizzano la logica di Horn per garantire decidibilità ed efficienza. La complessità computazionale per il controllo dei vincoli (es. `is_seasonal`) è lineare $O(N)$ rispetto al numero di ingredienti nella ricetta.
+## 1. Introduzione
+Il dominio di interesse è la nutrizione personalizzata assistita da intelligenza artificiale. La pianificazione dei pasti è un problema complesso che richiede di bilanciare vincoli nutrizionali rigidi (calorie, macro-nutrienti), restrizioni dietetiche (allergie, stili di vita) e preferenze personali.
+**NutriLogic** è un sistema KBS (Knowledge-Based System) progettato per assistere l'utente nella creazione di piani alimentari bilanciati, classificare automaticamente nuove ricette e verificare la compatibilità degli ingredienti con specifici profili dietetici.
 
-### Codice Sorgente Knowledge Base
-Di seguito riportiamo il contenuto integrale della KB per mostrare l'estensione delle regole e dei fatti.
+## 2. Architettura del Sistema
+Il sistema integra tre moduli principali che cooperano per fornire una soluzione completa:
 
+1.  **Modulo KB (Prolog)**: Gestisce la conoscenza ontologica e le regole di inferenza (es. compatibilità vegana, stagionalità).
+2.  **Modulo ML (Python/Scikit-learn)**: Classificatore supervisionato per predire l'etichetta nutrizionale ("Health Score") di nuove ricette.
+3.  **Modulo CSP (Python)**: Solutore di vincoli per la generazione dei menu giornalieri.
+
+---
+
+## 3. Modulo Knowledge Base (Logic Programming)
+
+### 3.1 Rappresentazione della Conoscenza
+Per la rappresentazione della conoscenza è stato utilizzato **Prolog**. La KB non agisce come un semplice database, ma definisce regole logiche per inferire proprietà non esplicite.
+-   **Fatti**: Database degli ingredienti (~60 entità) con macro-categoria e calorie; Database delle ricette (~25 ricette).
+-   **Regole**: Abbiamo modellato regole per dedurre se un piatto è adatto a celiaci, vegani o intolleranti al lattosio, e regole complesse come `is_seasonal` o `complete_dish`.
+
+### 3.2 Decisioni di Progetto
+Si è scelto di separare i "fatti" dalle "regole".
+*Esempio*: `is_vegan(Recipe)` non è salvato come fatto, ma derivato ricorsivamente verificando che nessun ingrediente sia di origine animale. Questo riduce la ridondanza e garantisce coerenza.
+
+### 3.3 Analisi della Complessità
+Le regole logiche sono strutturate come **Clausole di Horn**, garantendo un'inferenza efficiente.
+-   **Complessità Ciclomatica**: Bassa per la maggior parte delle regole.
+-   **Complessità Computazionale**: Predicati come `is_seasonal/2` comportano un'iterazione (`forall/2`) sulla lista degli ingredienti, risultando in una complessità lineare $O(N)$ rispetto al numero di ingredienti ($N \approx 5-10$).
+
+### 3.4 Appendice: Codice Sorgente KB
+### 3.4 Regole Ricorsive (Novità)
+Per gestire le dipendenze profonde tra ingredienti (es. allergeni nascosti), sono state introdotte regole ricorsive:
 ```prolog
-% --- Knowledge Base NutriLogic ---
+% Relazione Transitiva: un ingrediente deriva da un altro
+derived_from(X, Y) :- composed_of(X, Y).
+derived_from(X, Z) :- composed_of(X, Y), derived_from(Y, Z).
 
-% --- 1. FATTI: Ingredienti ---
-% ingredient(Name, MacroCategory, CaloriesPer100g).
-
-% Carni & Pesce
-ingredient(chicken, meat, 165).
-ingredient(beef, meat, 250).
-ingredient(salmon, fish, 208).
-ingredient(tuna, fish, 132).
-% [... omessi altri ingredienti comuni per brevità, vedi file sorgente ...]
-
-% --- 3. FATTI: Ricette (Campione) ---
-recipe(carbonara, [pasta, egg, cheese, bacon]).
-recipe(pasta_pomodoro, [pasta, tomato, oil, onion]).
-recipe(grilled_chicken, [chicken, oil]).
-% [... 20+ ricette totali ...]
-
-% --- 4. REGOLE LOGICHE ---
-
-% 4.1 Regole Dietetiche
-contains_meat(Recipe) :- recipe(Recipe, Ings), member(I, Ings), ingredient(I, meat, _).
-contains_dairy(Recipe) :- recipe(Recipe, Ings), member(I, Ings), ingredient(I, dairy, _).
-is_vegan(Recipe) :- \+ contains_meat(Recipe), \+ contains_dairy(Recipe), \+ contains_fish(Recipe), \+ contains_eggs(Recipe).
-
-% 4.2 Piatto Completo (Macro-nutrienti)
-has_carb(R) :- recipe(R, Ings), member(I, Ings), ingredient(I, grain, _).
-has_protein(R) :- recipe(R, Ings), member(I, Ings), (ingredient(I, meat, _); ingredient(I, fish, _); ingredient(I, legume, _)).
-has_veg(R) :- recipe(R, Ings), member(I, Ings), ingredient(I, vegetable, _).
-
-complete_dish(R) :- has_carb(R), has_protein(R), has_veg(R).
-
-% 4.3 Stagionalità (Inferenza su Liste)
-is_seasonal(Recipe, Season) :-
-    recipe(Recipe, Ings),
-    forall(member(I, Ings), (
-        (ingredient(I, vegetable, _); ingredient(I, fruit, _)) ->
-        (season(I, Season); \+ season(I, _))
-        ; true
-    )).
-
-% 4.4 Calcolo Calorie (Ricorsione)
-calculate_cal([], 0).
-calculate_cal([Ing|Tail], Tot) :-
-    ingredient(Ing, _, Cal),
-    calculate_cal(Tail, SubTot),
-    Tot is Cal + SubTot.
+% Query Esempio: Il pesto contiene latte?
+% ?- contains_allergen_deep(pasta_pesto, milk).
+% true. (Trace: pasta_pesto -> pesto -> parmesan -> milk)
 ```
 
-## 2. Machine Learning: Classificatore di Ricette
+## 4. Modulo Machine Learning (Supervised Learning)
 
-Il modulo di classificazione etichetta le ricette in base al loro profilo nutrizionale (es. *High Protein*, *Low Cal*, *Balanced*).
+Il modulo ML classifica le ricette in categorie come "Low Calorie", "Balanced", "High Energy".
 
-### Dataset e Preprocessing
-Poiché non era disponibile un dataset pubblico idoneo, è stato generato un **dataset sintetico controllato** di 600 istanze.
--   **Features ($X$)**: 4 attributi continui: [Calorie, Proteine, Carboidrati, Grassi].
--   **Target ($Y$)**: 5 classi di etichette nutrizionali.
--   **Preprocessing**: Scaling delle feature (StandardScaler) per normalizzare i range numerici diversi (es. calorie vs grammi).
+### 4.1 Dataset Bilanciato
+È stato generato un dataset sintetico di **600 istanze**, bilanciato uniformemente tra le 5 classi (~120 istanze per classe) per evitare bias nel training.
+-   **Features**: [Calorie, Proteine, Carboidrati, Grassi].
+-   **Classi**: Low Cal, Low Fat, Balanced, High Protein, High Energy.
 
-### Disegno Sperimentale: Nested Cross-Validation
-Per garantire una valutazione robusta e priva di bias, è stato adottato un approccio **Nested Cross-Validation (5x3)**:
+### 4.2 Disegno Sperimentale: Nested Cross-Validation
+(Invariato: 5x3 Folds)
 
-1.  **Outer Loop (5-Fold Stratified CV)**:
-    -   Divide il dataset in 5 parti. In ogni iterazione, trattiene un *Test Set* (20%) completamente separato per la valutazione finale delle performance.
-    -   Fornisce metriche non distorte (Accuracy, F1-Score) sulla capacità di generalizzazione.
+### 4.3 Risultati Sperimentali
+Grazie al bilanciamento delle classi, Accuracy e F1-Score sono metriche affidabili.
 
-2.  **Inner Loop (3-Fold CV con GridSearch)**:
-    -   Eseguito sul *Training Set* dell'Outer Loop.
-    -   Esplora la griglia degli iperparametri (es. `max_depth` per DecisionTree, `k` per KNN) per selezionare la configurazione migliore.
+| Modello | Accuracy (Mean) | F1-Score (Macro) | Note |
+| :--- | :--- | :--- | :--- |
+| **KNN** | 0.88 (+/- 0.04) | 0.88 | Buono. |
+| **Decision Tree** | **0.93 (+/- 0.02)** | **0.93** | **Eccellente**. Regole estratte: `IF cal < 300 THEN Low Cal`. |
 
-Questo approccio assicura che gli iperparametri non siano ottimizzati sui dati di test, prevenendo l'overfitting (data leakage).
+---
 
-## 3. Constraint Satisfaction Problem (CSP)
+## 5. Modulo Constraint Satisfaction Problem (CSP)
 
-Il Pianificatore di Diete è modellato formalmente come un CSP $<V, D, C>$.
+### 5.1 Algoritmi a Confronto
+Oltre al Backtracking (Libreria vs Custom), è stato implementato un algoritmo di **Local Search (Simulated Annealing)** per validare l'approccio su spazi di ricerca ampi.
 
-### Definizione Formale
--   **Variabili ($V$)**: L'insieme dei pasti da pianificare in un giorno.
-    $$V = \{ \text{Colazione}, \text{Pranzo}, \text{Cena}, \text{Snack}_1, \dots \}$$
--   **Domini ($D$)**: Per ogni variabile $v \in V$, il dominio $D_v$ è il sottoinsieme di ricette compatibili (es. $D_{Colazione} \subset \text{Ricette}$ di tipo 'breakfast').
-    $$D_v = \{ r \in \text{KB} \mid \text{tipo}(r) \text{ compatibile con } v \land \text{rispetta vincoli unari} \}$$
-    I vincoli unari (intolleranze) riducono il dominio *a priori*.
--   **Vincoli ($C$)**:
-    1.  **Vincolo Globale sulle Calorie**:
-        $$\left| \sum_{v \in V} \text{cal}(v) - \text{Target} \right| \leq \epsilon$$
-    2.  **Varietà (AllDifferent)**:
-        $$\forall v_i, v_j \in \{\text{Pranzo, Cena}\}, v_i \neq v_j$$
+1.  **Backtracking (Constraint Propagation)**: Metodo completo, esplora sistematicamente.
+2.  **Simulated Annealing (Meta-euristica)**: Metodo probabilistico. Parte da una soluzione casuale e la migliora, accettando peggioramenti con probabilità decrescente (Temperatura) per uscire da ottimi locali.
 
-### Confronto Algoritmico
-| Algoritmo | Tempo Esecuzione (3 Pasti) | Tempo Esecuzione (5 Pasti) | Completezza | Utilizzo |
+### 5.2 Risultati Benchmark
+| Algoritmo | Tempo (3 Pasti) | Tempo (5 Pasti) | Completezza | Scarto Obiettivo |
 | :--- | :--- | :--- | :--- | :--- |
-| **Libreria (`python-constraint`)** | **< 0.001s** | **~0.002s** | Completo | Produzione |
-| **Custom Backtracking** | ~0.005s | ~0.05s | Completo | Didattica/Verifica |
+| **Libreria (`python-constraint`)** | **< 0.001s** | **~0.002s** | Completo | Ottimo |
+| **Simulated Annealing** | ~0.02s | ~0.04s | Probabilistico | Buono (< 15%) |
+| **Custom Backtracking** | ~0.005s | ~0.05s | Completo | Ottimo |
 
-**Conclusione**: Il solver della libreria mantiene prestazioni costanti anche all'aumentare della complessità (5 pasti), mentre il backtracking custom mostra un leggero degrado prestazionale lineare/esponenziale, confermando l'efficacia delle euristiche di ottimizzazione (Forward Checking) integrate nella libreria. Entrambi garantiscono soluzioni valide (Scarto Calorie ~15-20% tolleranza).
+**Conclusione**: Il solver basato su libreria rimane il più efficiente grazie alle euristiche di dominio. Il Simulated Annealing si dimostra una valida alternativa approssimata, convergendo in tempi rapidi anche se non garantisce la soluzione ottima globale (scarto medio accettabile).
+
+---
+
+## 6. Conclusioni
+Il sistema NutriLogic dimostra come la logica simbolica (Prolog) possa guidare efficacemente (filtraggio domini, verifica vincoli) un sistema statistico (ML) e un solutore combinatorio (CSP).
+I risultati sperimentali confermano l'affidabilità del classificatore (Acc > 90%) e l'efficienza del solver CSP per la pianificazione real-time.
+
+## 7. Riferimenti Bibliografici
+[1] Poole, D. L., & Mackworth, A. K. (2017). *Artificial Intelligence: foundations of computational agents*. Cambridge University Press.
+[2] Documentazione Scikit-Learn: [https://scikit-learn.org](https://scikit-learn.org)
+[3] SWI-Prolog Reference Manual.

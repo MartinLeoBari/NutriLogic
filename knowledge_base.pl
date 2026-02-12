@@ -244,3 +244,21 @@ calculate_cal([Ing|Tail], Tot) :-
     calculate_cal(Tail, SubTot),
     Tot is TrueCal + SubTot.
 
+
+% --- 5. REGOLE RICORSIVE PROFONDE (Deep Tracing) ---
+% Relazione derived_from: un ingrediente deriva da un altro se e identico o composto da esso.
+
+composed_of(pesto, parmesan).
+composed_of(pesto, pine_nuts).
+composed_of(parmesan, milk).
+composed_of(bread, flour).
+composed_of(flour, wheat).
+composed_of(pasta, wheat).
+
+derived_from(X, Y) :- composed_of(X, Y).
+derived_from(X, Z) :- composed_of(X, Y), derived_from(Y, Z).
+
+contains_allergen_deep(Recipe, Allergen) :-
+    recipe(Recipe, Ingredients),
+    member(Ing, Ingredients),
+    (Ing = Allergen ; derived_from(Ing, Allergen)).

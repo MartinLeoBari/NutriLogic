@@ -271,8 +271,112 @@ class DietPlanner:
             return self._build_result(solution, available_recipes, vars_order, target_calories)
         return None
 
+    def solve_simulated_annealing(self, target_calories, intolerances=[], num_meals=3):
+        """
+        SIMULATED ANNEALING SOLVER.
+        Algoritmo di ricerca locale per trovare una soluzione approssimata.
+        """
+        import math
+        import random
+
+        available_recipes = self.filter_recipes(intolerances)
+        if len(available_recipes) < num_meals:
+            return None
+
+        # Prepariamo i domini
+        recipes_by_type = {
+            'breakfast': [], 'main': [], 'second': [],
+            'side': [], 'snack': [], 'dessert': []
+        }
+        for i, r in enumerate(available_recipes):
+            recipes_by_type[r['type']].append(i)
+
+        if num_meals == 5:
+            vars_order = ["Breakfast", "Lunch", "LunchSecond", "Dinner", "MorningSnack", "AfternoonSnack"]
+            # Semplificazione domini per SA: lista piatta di indici validi per tipo
+            domains = {
+                "Breakfast": recipes_by_type['breakfast'],
+                "Lunch": recipes_by_type['main'],
+                "Dinner": recipes_by_type['main'],
+                "LunchSecond": recipes_by_type['second'],
+                "MorningSnack": recipes_by_type['snack'] + recipes_by_type['dessert'],
+                "AfternoonSnack": recipes_by_type['snack'] + recipes_by_type['dessert']
+            }
+        else:
+            vars_order = ["Lunch", "Dinner", "Snack"]
+            main_sec = recipes_by_type['main'] + recipes_by_type['second']
+            domains = {
+                "Lunch": main_sec,
+                "Dinner": main_sec,
+                "Snack": recipes_by_type['snack'] + recipes_by_type['dessert']
+            }
+
+        # Fallback per domini vuoti
+        for v in vars_order:
+            if not domains[v]: domains[v] = list(range(len(available_recipes)))
+
+        # Stato Iniziale Casuale
+        current_state = {}
+        for v in vars_order:
+            current_state[v] = random.choice(domains[v])
+
+        def calculate_cost(state):
+            total_cal = sum(available_recipes[state[v]]['calories'] for v in vars_order)
+            cost = abs(total_cal - target_calories)
+
+            # Penalità Violazione Vincoli
+            # AllDifferent
+            penalty = 0
+            if "Lunch" in state and "Dinner" in state and state["Lunch"] == state["Dinner"]:
+                penalty += 1000
+
+            return cost + penalty
+
+        current_cost = calculate_cost(current_state)
+        best_state = current_state.copy()
+        best_cost = current_cost
+
+        # Parametri SA
+        T = 1000.0
+        cooling_rate = 0.95
+        min_T = 0.1
+
+        while T > min_T:
+            # Genera vicino (Modifica 1 pasto a caso)
+            neighbor = current_state.copy()
+            var_to_change = random.choice(vars_order)
+            neighbor[var_to_change] = random.choice(domains[var_to_change])
+
+            neighbor_cost = calculate_cost(neighbor)
+
+            # Accetta o no?
+            delta = neighbor_cost - current_cost
+            if delta < 0: # Miglioramento
+                current_state = neighbor
+                current_cost = neighbor_cost
+                if current_cost < best_cost:
+                    best_state = current_state.copy()
+                    best_cost = current_cost
+            else:
+                # Accetta con probabilità e^(-delta/T)
+                if random.random() < math.exp(-delta / T):
+                    current_state = neighbor
+                    current_cost = neighbor_cost # Accetta peggioramento per uscire da minimi locali
+
+            T *= cooling_rate
+
+            if best_cost == 0: # Soluzione perfetta
+                break
+
+        # Controllo tolleranza finale (14.9%)
+        tolerance = target_calories * 0.15
+        if best_cost <= tolerance: # Accettiamo se l'errore è dentro la tolleranza (ignora penalità constraint hard per semplicità qui)
+             return self._build_result(best_state, available_recipes, vars_order, target_calories)
+
+        return None
+
     def compare_solvers(self, target_calories, intolerances=[], num_meals=3):
-        """Confronta CSP Library vs Custom Backtracking."""
+        """Confronta CSP Library vs Custom Backtracking vs Simulated Annealing."""
         import time
 
         print(f"\n--- Confronto Solver (Target: {target_calories} kcal, Pasti: {num_meals}) ---")
@@ -290,6 +394,13 @@ class DietPlanner:
         cust_time = time.time() - start_time
         cust_score = cust_sol['_diff'] if cust_sol else "N/A"
         print(f"Custom Backtracking: Tempo = {cust_time:.4f}s, Scarto = {cust_score}")
+
+        # 3. Simulated Annealing
+        start_time = time.time()
+        sa_sol = self.solve_simulated_annealing(target_calories, intolerances, num_meals=num_meals)
+        sa_time = time.time() - start_time
+        sa_score = sa_sol['_diff'] if sa_sol else "N/A"
+        print(f"Simulated Annealing: Tempo = {sa_time:.4f}s, Scarto = {sa_score}")
 
         return lib_sol, cust_sol
 
